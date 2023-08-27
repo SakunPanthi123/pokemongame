@@ -9,6 +9,7 @@ import 'package:pokemongame/player.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     theme: ThemeData(
       primarySwatch: Colors.orange,
     ),
@@ -24,9 +25,13 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   double playerX = 0;
   double playerY = 0;
-  String playerDirection = 'u1';
+  String playerDirection = 'd1';
+  // movement disable check
+  bool disabled = false;
 
   void moveUp() {
+    disabled = true;
+
     List<String> playerDirections = ['u1', 'u2', 'u3', 'u4', 'u5'];
     var i = 0;
     Timer.periodic(Duration(milliseconds: 100), (timer) {
@@ -37,11 +42,13 @@ class _MyAppState extends State<MyApp> {
 
       if (i == 5) {
         timer.cancel();
+        disabled = false;
       }
     });
   }
 
   void moveDown() {
+    disabled = true;
     List<String> playerDirections = ['d1', 'd2', 'd3', 'd4', 'd5'];
     var i = 0;
     Timer.periodic(Duration(milliseconds: 100), (timer) {
@@ -52,11 +59,14 @@ class _MyAppState extends State<MyApp> {
 
       if (i == 5) {
         timer.cancel();
+        disabled = false;
       }
     });
   }
 
   void moveLeft() {
+    disabled = true;
+
     List<String> playerDirections = ['l1', 'l2', 'l3', 'l4', 'l5'];
     var i = 0;
     Timer.periodic(Duration(milliseconds: 100), (timer) {
@@ -67,11 +77,13 @@ class _MyAppState extends State<MyApp> {
 
       if (i == 5) {
         timer.cancel();
+        disabled = false;
       }
     });
   }
 
   void moveRight() {
+    disabled = true;
     List<String> playerDirections = ['r1', 'r2', 'r3', 'r4', 'r5'];
     var i = 0;
     Timer.periodic(Duration(milliseconds: 100), (timer) {
@@ -82,6 +94,7 @@ class _MyAppState extends State<MyApp> {
 
       if (i == 5) {
         timer.cancel();
+        disabled = false;
       }
     });
   }
@@ -124,7 +137,9 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      moveUp();
+                      if (disabled != true) {
+                        moveUp();
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(30),
@@ -132,14 +147,16 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          moveLeft();
+                          if (disabled != true) {
+                            moveLeft();
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(30),
@@ -147,11 +164,13 @@ class _MyAppState extends State<MyApp> {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 10,
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          moveRight();
+                          if (disabled != true) {
+                            moveRight();
+                          }
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(30),
@@ -161,11 +180,13 @@ class _MyAppState extends State<MyApp> {
                     ],
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      moveDown();
+                      if (disabled != true) {
+                        moveDown();
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(30),
