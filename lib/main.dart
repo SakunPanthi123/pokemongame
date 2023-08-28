@@ -478,13 +478,20 @@ class _MyAppState extends State<MyApp> {
                       child: Text('Down'),
                     ),
                   ),
-                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          clear();
-                        },
-                        child: Text('X')),
-                  ]),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              dir = 'n';
+                            },
+                            child: Text('N')),
+                        ElevatedButton(
+                            onPressed: () {
+                              clear();
+                            },
+                            child: Text('X')),
+                      ]),
                 ],
               ),
             ),
