@@ -10,7 +10,6 @@ class Player extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log(direction.substring(1));
     return Container(
       alignment: Alignment(0, 0),
       child: direction.substring(0, 1) != 'r'
