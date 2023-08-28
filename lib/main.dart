@@ -49,20 +49,50 @@ class _MyAppState extends State<MyApp> {
   List<List<double>> uDT = [];
   List<List<double>> dDT = [];
   List<List<double>> lrDT = [
-    [1.0034, 0.9924]
+    [1.0034, 0.9924],
+    [0.8633, 0.8990],
+    [0.8633, 0.8523],
+    [-0.1641, 0.4787],
+    [-0.1641, 0.4320],
+    [-0.1641, 0.3853],
+    [-0.1641, 0.3386],
+    [-0.1641, 0.2919],
+    [-0.2108, 0.1985],
+    [-0.2108, 0.1518],
+    [-0.2108, 0.1051],
+    [-0.2108, 0.0584],
+    [-0.2108, 0.0117],
+    [-0.2108, -0.0350],
+    [-0.2108, -0.0817],
+    [-0.2108, -0.1284],
+    [-0.2108, -0.1751],
+    [-0.2108, -0.2218],
+    [-0.2575, -0.3152],
   ];
   List<List<double>> udDT = [
     [1.1435, 1.0858],
-    [1.0501, 1.0391]
+    [1.0501, 1.0391],
+    [0.9567, 0.9457],
+    [0.9100, 0.9457],
+    [0.8166, 0.8056],
+    [0.7232, 0.7589],
   ];
   List<List<double>> ldDT = [
     [1.0968, 1.0858],
-    [1.0034, 1.0391]
+    [1.0034, 1.0391],
+    [0.8633, 0.9457],
+    [0.7699, 0.8056],
+    [-0.2108, 0.2452],
+    [-0.2575, -0.2685],
   ];
   List<List<double>> luDT = [];
   List<List<double>> ruDT = [
     [1.0968, 1.0391],
-    [1.0034, 0.9457]
+    [1.0034, 0.9457],
+    [0.8633, 0.8056],
+    [0.7699, 0.7589],
+    [-0.1641, 0.2452],
+    [-0.2108, -0.2685],
   ];
   List<List<double>> rdDT = [];
 
@@ -162,9 +192,8 @@ class _MyAppState extends State<MyApp> {
       if (i == 5) {
         timer.cancel();
         disabled = false;
-        // log coordinates to make the avoidance list
-        log(playerX.toStringAsFixed(4));
-        log(playerY.toStringAsFixed(4));
+        // call the developer collision function
+        solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
     });
   }
@@ -185,9 +214,8 @@ class _MyAppState extends State<MyApp> {
       if (i == 5) {
         timer.cancel();
         disabled = false;
-        // log coordinates to make the avoidance list
-        log(playerX.toStringAsFixed(4));
-        log(playerY.toStringAsFixed(4));
+        // call the developer collision function
+        solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
     });
   }
@@ -208,9 +236,7 @@ class _MyAppState extends State<MyApp> {
       if (i == 5) {
         timer.cancel();
         disabled = false;
-        // log coordinates to make the avoidance list
-        log(playerX.toStringAsFixed(4));
-        log(playerY.toStringAsFixed(4));
+
         // call the developer collision function
         solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
@@ -233,10 +259,8 @@ class _MyAppState extends State<MyApp> {
       if (i == 5) {
         timer.cancel();
         disabled = false;
-
-        // log coordinates to make the avoidance list
-        log(playerX.toStringAsFixed(4));
-        log(playerY.toStringAsFixed(4));
+        // call the developer collision function
+        solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
     });
   }
@@ -282,24 +306,107 @@ class _MyAppState extends State<MyApp> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ElevatedButton(onPressed: () {}, child: Text('l')),
-                          ElevatedButton(onPressed: () {}, child: Text('r')),
-                          ElevatedButton(onPressed: () {}, child: Text('u')),
-                          ElevatedButton(onPressed: () {}, child: Text('d')),
-                          ElevatedButton(onPressed: () {}, child: Text('lr')),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'l';
+                              },
+                              child: Row(
+                                children: [Icon(Icons.arrow_left)],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'u';
+                              },
+                              child: Row(
+                                children: [Icon(Icons.arrow_drop_up)],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'r';
+                              },
+                              child: Row(
+                                children: [Icon(Icons.arrow_right)],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'd';
+                              },
+                              child: Row(
+                                children: [Icon(Icons.arrow_drop_down)],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'lr';
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.arrow_left),
+                                  Icon(Icons.arrow_right)
+                                ],
+                              )),
                         ],
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ElevatedButton(onPressed: () {}, child: Text('ud')),
-                          ElevatedButton(onPressed: () {}, child: Text('ld')),
-                          ElevatedButton(onPressed: () {}, child: Text('lu')),
-                          ElevatedButton(onPressed: () {}, child: Text('ru')),
-                          ElevatedButton(onPressed: () {}, child: Text('rd')),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'ud';
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.arrow_drop_up),
+                                  Icon(Icons.arrow_drop_down)
+                                ],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'ld';
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.arrow_left),
+                                  Icon(Icons.arrow_drop_down)
+                                ],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'lu';
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.arrow_left),
+                                  Icon(Icons.arrow_drop_up)
+                                ],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'ru';
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.arrow_right),
+                                  Icon(Icons.arrow_drop_up)
+                                ],
+                              )),
+                          ElevatedButton(
+                              onPressed: () {
+                                dir = 'rd';
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.arrow_right,
+                                  ),
+                                  Icon(Icons.arrow_drop_down)
+                                ],
+                              )),
                         ],
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -371,6 +478,13 @@ class _MyAppState extends State<MyApp> {
                       child: Text('Down'),
                     ),
                   ),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          clear();
+                        },
+                        child: Text('X')),
+                  ]),
                 ],
               ),
             ),
