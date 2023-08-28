@@ -14,9 +14,9 @@ class GameScreen extends StatelessWidget {
       maxHeight: double.infinity,
       maxWidth: double.infinity,
       child: Image.asset(
-        'images/map.png',
+        'images/map2.png',
         fit: BoxFit.cover,
-        width: MediaQuery.of(context).size.width * 3,
+        width: MediaQuery.of(context).size.width * 5,
         filterQuality: FilterQuality.none,
       ),
     );
