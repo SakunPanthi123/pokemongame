@@ -1,15 +1,23 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_cast
 
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pokemongame/collisionSolver.dart';
+import 'package:pokemongame/firebase_options.dart';
 import 'package:pokemongame/gamescreen.dart';
 import 'package:pokemongame/player.dart';
+import 'package:pokemongame/player2.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
@@ -25,13 +33,25 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // firebase
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  // player2 code
+  double player2LocationX = 0;
+  double player2LocationY = 0;
+  double player2StepSize = 0.330;
   // collision developer code
   String dir = 'l';
 
+  // player1 code
   double step = 0.0467;
   double playerX = 0.91;
   double playerY = 0.899;
   String playerDirection = 'd1';
+
+  // just to put in the server, cannot change location this way or it could be but its difficult for me to implement
+  double gridX = 45;
+  double gridY = 45;
 
   // movement disable check
   bool disabled = false;
@@ -95,6 +115,33 @@ class _MyAppState extends State<MyApp> {
     [-0.2108, -0.2685],
   ];
   List<List<double>> rdDT = [];
+
+  //init state
+  @override
+  void initState() {
+    double p2GridX = 35;
+    double p2GridY = 45;
+    List<String> playerDirections = ['r1', 'r2', 'r3', 'r4', 'r5'];
+    int i = 0;
+    Timer.periodic(Duration(milliseconds: 160), (timer) {
+      firestore.collection('player2').doc('coordinates').update({
+        'X': p2GridX.toString(),
+        //'Y': p2GridY.toString(),
+        'direction': playerDirections[i],
+      });
+      p2GridX += 0.1;
+      i++;
+      if (i == 5) {
+        i = 0;
+      }
+      //p2GridY += 0.2;
+      if (p2GridX > 49) {
+        timer.cancel();
+      }
+    });
+    super.initState();
+    setState(() {});
+  }
 
   void avoider() {
     // lDT checker
@@ -187,11 +234,14 @@ class _MyAppState extends State<MyApp> {
       playerDirection = playerDirections[i];
       i++;
       playerY -= step / 5;
+      player2LocationY += player2StepSize / 5;
+      gridY -= 0.2;
       setState(() {});
 
       if (i == 5) {
         timer.cancel();
         disabled = false;
+
         // call the developer collision function
         solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
@@ -209,11 +259,15 @@ class _MyAppState extends State<MyApp> {
       playerDirection = playerDirections[i];
       i++;
       playerY += step / 5;
+      gridY += 0.2;
+      player2LocationY -= player2StepSize / 5;
+
       setState(() {});
 
       if (i == 5) {
         timer.cancel();
         disabled = false;
+
         // call the developer collision function
         solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
@@ -231,12 +285,14 @@ class _MyAppState extends State<MyApp> {
       playerDirection = playerDirections[i];
       i++;
       playerX -= step / 5;
+      player2LocationX += player2StepSize / 5;
+      gridX -= 0.2;
+
       setState(() {});
 
       if (i == 5) {
         timer.cancel();
         disabled = false;
-
         // call the developer collision function
         solver(dir, playerX.toStringAsFixed(4), playerY.toStringAsFixed(4));
       }
@@ -254,6 +310,9 @@ class _MyAppState extends State<MyApp> {
       playerDirection = playerDirections[i];
       i++;
       playerX += step / 5;
+      player2LocationX -= player2StepSize / 5;
+      gridX += 0.2;
+
       setState(() {});
 
       if (i == 5) {
@@ -287,6 +346,35 @@ class _MyAppState extends State<MyApp> {
 
                   //player
                   Player(playerDirection),
+
+                  //player2
+                  StreamBuilder(
+                      stream: firestore.collection('player2').snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('');
+                        } else if (snapshot.hasError) {
+                          return Text('');
+                        }
+                        List<List<dynamic>> nates =
+                            snapshot.data!.docs.map((document) {
+                          Map<String, dynamic> coord =
+                              document.data() as Map<String, dynamic>;
+                          return [
+                            coord['X'],
+                            coord['Y'],
+                            coord['direction'],
+                            coord['walk']
+                          ];
+                        }).toList();
+                        player2LocationX = (double.parse(nates[0][0]) - gridX) *
+                            player2StepSize;
+                        log(nates[0][0].toString());
+                        player2LocationY = (double.parse(nates[0][1]) - gridY) *
+                            player2StepSize;
+                        return Player2(
+                            player2LocationX, player2LocationY, nates[0][2]);
+                      }),
                 ],
               ),
             ),

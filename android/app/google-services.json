@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "876947399130",
+    "project_id": "pokemongame-d6af0",
+    "storage_bucket": "pokemongame-d6af0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876947399130:android:3b7aca9b41725bb28be0e3",
+        "android_client_info": {
+          "package_name": "com.example.pokemongame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876947399130-qiau6pecldmofuu7crsm0t5136e6u604.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe5zIQ6B8C9tsNuCAQra538taT2AIKrHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876947399130-qiau6pecldmofuu7crsm0t5136e6u604.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
