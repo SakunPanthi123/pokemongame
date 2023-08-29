@@ -355,6 +355,8 @@ class _MyAppState extends State<MyApp> {
                             coord['Y'],
                             coord['direction'],
                             coord['name'],
+                            coord['msg'],
+                            coord['show'],
                           ];
                         }).toList();
                         nates.removeWhere(
@@ -365,8 +367,14 @@ class _MyAppState extends State<MyApp> {
                                 player2StepSize;
                             player2LocationY = (double.parse(nate[1]) - gridY) *
                                 player2StepSize;
+                            String message;
+                            if (nate[5] == true) {
+                              message = nate[4];
+                            } else {
+                              message = '';
+                            }
                             return Player2(player2LocationX, player2LocationY,
-                                nate[2], nate[3]);
+                                nate[2], nate[3], message);
                           }).toList(),
                         );
                       },
@@ -386,110 +394,6 @@ class _MyAppState extends State<MyApp> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'l';
-                              },
-                              child: Row(
-                                children: [Icon(Icons.arrow_left)],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'u';
-                              },
-                              child: Row(
-                                children: [Icon(Icons.arrow_drop_up)],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'r';
-                              },
-                              child: Row(
-                                children: [Icon(Icons.arrow_right)],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'd';
-                              },
-                              child: Row(
-                                children: [Icon(Icons.arrow_drop_down)],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'lr';
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.arrow_left),
-                                  Icon(Icons.arrow_right)
-                                ],
-                              )),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'ud';
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.arrow_drop_up),
-                                  Icon(Icons.arrow_drop_down)
-                                ],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'ld';
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.arrow_left),
-                                  Icon(Icons.arrow_drop_down)
-                                ],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'lu';
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.arrow_left),
-                                  Icon(Icons.arrow_drop_up)
-                                ],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'ru';
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(Icons.arrow_right),
-                                  Icon(Icons.arrow_drop_up)
-                                ],
-                              )),
-                          ElevatedButton(
-                              onPressed: () {
-                                dir = 'rd';
-                              },
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.arrow_right,
-                                  ),
-                                  Icon(Icons.arrow_drop_down)
-                                ],
-                              )),
-                        ],
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 15,
                   ),
@@ -539,6 +443,18 @@ class _MyAppState extends State<MyApp> {
                             }
                           }
                         },
+                        onLongPress: () {
+                          Timer.periodic(Duration(milliseconds: 500), (timer) {
+                            if (!disabled) {
+                              avoider();
+                              if (right) {
+                                moveRight();
+                              } else {
+                                timer.cancel();
+                              }
+                            }
+                          });
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(30),
                           child: Text('Right'),
@@ -564,19 +480,59 @@ class _MyAppState extends State<MyApp> {
                     ),
                   ),
                   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              dir = 'n';
-                            },
-                            child: Text('N')),
-                        ElevatedButton(
-                            onPressed: () {
-                              clear();
-                            },
-                            child: Text('X')),
-                      ]),
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  final msgController = TextEditingController();
+                                  return Dialog(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(30),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Enter your mesage'),
+                                          TextField(
+                                            controller: msgController,
+                                            decoration: InputDecoration(
+                                                hintText: 'Enter your message'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () async {
+                                              firestore
+                                                  .collection('player2')
+                                                  .doc(widget.userName)
+                                                  .update({
+                                                'msg': msgController.text,
+                                                'show': true,
+                                              });
+                                              Navigator.of(context).pop();
+                                              msgController.text = '';
+                                              await Future.delayed(
+                                                  Duration(seconds: 2));
+                                              firestore
+                                                  .collection('player2')
+                                                  .doc(widget.userName)
+                                                  .update({
+                                                'msg': msgController.text,
+                                                'show': false,
+                                              });
+                                              setState(() {});
+                                            },
+                                            child: Text('Send'),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
+                          },
+                          child: Text('Chat'))
+                    ],
+                  )
                 ],
               ),
             ),

@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 
 class Player2 extends StatelessWidget {
   final String name;
+  final String message;
   final double x;
   final double y;
   final String direction;
-  const Player2(this.x, this.y, this.direction, this.name);
+  const Player2(this.x, this.y, this.direction, this.name, this.message);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,17 @@ class Player2 extends StatelessWidget {
               alignment: Alignment(0.2, 0.8),
               child: Text(
                 name,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: Colors.amber[100],
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment(0.2, -0.8),
+              child: Text(
+                message,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
