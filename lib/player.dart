@@ -50,7 +50,7 @@ class Player extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.amber[300]),
+                  color: Colors.amber[200]),
             ),
           ),
         ],

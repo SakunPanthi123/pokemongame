@@ -319,7 +319,8 @@ class _MyAppState extends State<MyApp> {
       body: Column(
         children: [
           // game screen
-          SizedBox(
+          Container(
+            color: Colors.black,
             height: 400,
             child: AspectRatio(
               aspectRatio: 1,
