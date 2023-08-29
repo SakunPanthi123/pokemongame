@@ -16,7 +16,7 @@ class GameScreen extends StatelessWidget {
       child: Image.asset(
         'images/map2.png',
         fit: BoxFit.cover,
-        width: MediaQuery.of(context).size.width * 7,
+        width: 411.4285 * 7,
         filterQuality: FilterQuality.none,
       ),
     );

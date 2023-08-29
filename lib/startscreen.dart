@@ -8,6 +8,8 @@ import 'package:pokemongame/app.dart';
 
 late double playerX;
 late double playerY;
+late double gridX = 45;
+late double gridY = 45;
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -77,6 +79,29 @@ class _StartScreenState extends State<StartScreen> {
                     'PX': '0.9100',
                     'PY': '0.8990',
                   });
+
+                  Future<List<String>> getLatestLocation() async {
+                    DocumentSnapshot snapshot = await firestore
+                        .collection('player2')
+                        .doc(nameController.text)
+                        .get();
+                    if (snapshot.exists) {
+                      var data = snapshot.data() as Map<String, dynamic>;
+                      String pX = data['PX'];
+                      String pY = data['PY'];
+                      String x = data['X'];
+                      String y = data['Y'];
+                      return Future<List<String>>.value([pX, pY, x, y]);
+                    } else {
+                      return Future<List<String>>.value(['0.9100', '0.8990']);
+                    }
+                  }
+
+                  playerX = double.parse((await getLatestLocation())[0]);
+                  playerY = double.parse((await getLatestLocation())[1]);
+                  gridX = double.parse((await getLatestLocation())[2]);
+                  gridY = double.parse((await getLatestLocation())[3]);
+
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (BuildContext context) => MyApp(
                             userName: nameController.text,
@@ -122,16 +147,18 @@ class _StartScreenState extends State<StartScreen> {
                       var data = snapshot.data() as Map<String, dynamic>;
                       String pX = data['PX'];
                       String pY = data['PY'];
-                      return Future<List<String>>.value([pX, pY]);
+                      String x = data['X'];
+                      String y = data['Y'];
+                      return Future<List<String>>.value([pX, pY, x, y]);
                     } else {
                       return Future<List<String>>.value(['0.9100', '0.8990']);
                     }
                   }
 
                   playerX = double.parse((await getLatestLocation())[0]);
-                  log(playerX.toString());
                   playerY = double.parse((await getLatestLocation())[1]);
-                  log(playerY.toString());
+                  gridX = double.parse((await getLatestLocation())[2]);
+                  gridY = double.parse((await getLatestLocation())[3]);
 
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (BuildContext context) => MyApp(

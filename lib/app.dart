@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
   // player2 code
   double player2LocationX = 0;
   double player2LocationY = 0;
-  double player2StepSize = 0.330;
+  double player2StepSize = 0.322;
   // collision developer code
   String dir = 'l';
 
@@ -36,8 +36,6 @@ class _MyAppState extends State<MyApp> {
   String playerDirection = 'd1';
 
   // just to put in the server, cannot change location this way or it could be but its difficult for me to implement
-  double gridX = 45;
-  double gridY = 45;
 
   // movement disable check
   bool disabled = false;
@@ -313,62 +311,67 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    player2StepSize = 0.390;
+    log(MediaQuery.of(context).size.width.toString());
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
     return Scaffold(
       body: Column(
         children: [
           // game screen
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              color: Colors.black,
-              child: Stack(
-                children: [
-                  //map
-                  GameScreen(
-                    playerX,
-                    playerY,
-                  ),
+          SizedBox(
+            height: 400,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                color: Colors.black,
+                child: Stack(
+                  children: [
+                    //map
+                    GameScreen(
+                      playerX,
+                      playerY,
+                    ),
 
-                  //player
-                  Player(playerDirection),
+                    //player
+                    Player(playerDirection, widget.userName),
 
-                  //player2
-                  StreamBuilder(
-                    stream: firestore.collection('player2').snapshots(),
-                    builder: (BuildContext context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Text('');
-                      } else if (snapshot.hasError) {
-                        return Text('');
-                      }
-                      List<List<dynamic>> nates =
-                          snapshot.data!.docs.map((document) {
-                        Map<String, dynamic> coord =
-                            document.data() as Map<String, dynamic>;
-                        return [
-                          coord['X'],
-                          coord['Y'],
-                          coord['direction'],
-                          coord['name'],
-                        ];
-                      }).toList();
-                      nates.removeWhere(
-                          (element) => element[3] == widget.userName);
-                      return Stack(
-                        children: nates.map((nate) {
-                          player2LocationX =
-                              (double.parse(nate[0]) - gridX) * player2StepSize;
-                          player2LocationY =
-                              (double.parse(nate[1]) - gridY) * player2StepSize;
-                          return Player2(
-                              player2LocationX, player2LocationY, nate[2]);
-                        }).toList(),
-                      );
-                    },
-                  ),
-                ],
+                    //player2
+                    StreamBuilder(
+                      stream: firestore.collection('player2').snapshots(),
+                      builder: (BuildContext context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return Text('');
+                        } else if (snapshot.hasError) {
+                          return Text('');
+                        }
+                        List<List<dynamic>> nates =
+                            snapshot.data!.docs.map((document) {
+                          Map<String, dynamic> coord =
+                              document.data() as Map<String, dynamic>;
+                          return [
+                            coord['X'],
+                            coord['Y'],
+                            coord['direction'],
+                            coord['name'],
+                          ];
+                        }).toList();
+                        nates.removeWhere(
+                            (element) => element[3] == widget.userName);
+                        return Stack(
+                          children: nates.map((nate) {
+                            player2LocationX = (double.parse(nate[0]) - gridX) *
+                                player2StepSize;
+                            player2LocationY = (double.parse(nate[1]) - gridY) *
+                                player2StepSize;
+                            return Player2(player2LocationX, player2LocationY,
+                                nate[2], nate[3]);
+                          }).toList(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
