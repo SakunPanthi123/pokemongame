@@ -23,7 +23,7 @@ class Player2 extends StatelessWidget {
         width: 100,
         child: Stack(
           children: [
-            direction.substring(0, 1) != 'r'
+            direction[0] != 'r'
                 ? Align(
                     alignment: Alignment(0, 0),
                     child: Image.asset(

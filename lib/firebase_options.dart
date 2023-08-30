@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -52,11 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDFreeYTMW1crv8Lyfty98IFf_K4NeR1_g',
+    appId: '1:639810932931:web:2a31572696b75734245276',
+    messagingSenderId: '639810932931',
+    projectId: 'poke-7a1c1',
+    authDomain: 'poke-7a1c1.firebaseapp.com',
+    storageBucket: 'poke-7a1c1.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDe5zIQ6B8C9tsNuCAQra538taT2AIKrHc',
-    appId: '1:876947399130:android:3b7aca9b41725bb28be0e3',
-    messagingSenderId: '876947399130',
-    projectId: 'pokemongame-d6af0',
-    storageBucket: 'pokemongame-d6af0.appspot.com',
+    apiKey: 'AIzaSyBrgEUNySHoVLaHUPTEOw3-soCHYxP_GsY',
+    appId: '1:639810932931:android:b2d791fba509ae49245276',
+    messagingSenderId: '639810932931',
+    projectId: 'poke-7a1c1',
+    storageBucket: 'poke-7a1c1.appspot.com',
   );
 }

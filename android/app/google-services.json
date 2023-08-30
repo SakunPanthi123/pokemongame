@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "876947399130",
-    "project_id": "pokemongame-d6af0",
-    "storage_bucket": "pokemongame-d6af0.appspot.com"
+    "project_number": "639810932931",
+    "project_id": "poke-7a1c1",
+    "storage_bucket": "poke-7a1c1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:876947399130:android:3b7aca9b41725bb28be0e3",
+        "mobilesdk_app_id": "1:639810932931:android:b2d791fba509ae49245276",
         "android_client_info": {
           "package_name": "com.example.pokemongame"
         }
       },
       "oauth_client": [
         {
-          "client_id": "876947399130-qiau6pecldmofuu7crsm0t5136e6u604.apps.googleusercontent.com",
+          "client_id": "639810932931-8fpvesuqeqvdt648av8jnnrljjg774rq.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDe5zIQ6B8C9tsNuCAQra538taT2AIKrHc"
+          "current_key": "AIzaSyBrgEUNySHoVLaHUPTEOw3-soCHYxP_GsY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "876947399130-qiau6pecldmofuu7crsm0t5136e6u604.apps.googleusercontent.com",
+              "client_id": "639810932931-8fpvesuqeqvdt648av8jnnrljjg774rq.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
