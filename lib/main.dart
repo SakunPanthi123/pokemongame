@@ -7,6 +7,7 @@ import 'package:pokemongame/app.dart';
 import 'package:pokemongame/firebase_options.dart';
 import 'package:pokemongame/startscreen.dart';
 
+// support for web added
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
